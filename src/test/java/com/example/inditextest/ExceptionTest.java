@@ -1,20 +1,26 @@
 package com.example.inditextest;
 
-import com.example.inditextest.adapters.db.PriceJpaRepository;
-import com.example.inditextest.adapters.db.PriceRepository;
+import com.example.inditextest.adapters.db.PriceRepositoryImpl;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.OffsetDateTime;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -26,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureEmbeddedDatabase
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-public class ExceptionTest {
+class ExceptionTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,48 +41,41 @@ public class ExceptionTest {
     private WebApplicationContext webApplicationContext;
 
     @Mock
-    PriceRepository priceRepository;
-
-    @Autowired
-    PriceJpaRepository priceJpaRepository;
+    PriceRepositoryImpl priceRepositoryImpl;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    // TODO: PARAMETERISE TESTS
-    @Test
-    void exceptionsAreHandledCorrectly() throws Exception {
+    @ParameterizedTest
+    @MethodSource
+    void exceptionsAreHandledCorrectly(String currentDateTime, String productId, String brandId, ResultMatcher expectedStatus
+                                        ) throws Exception {
+        when(priceRepositoryImpl.findMatchingPricesForProductAndBrandIds(any(), any())).thenCallRealMethod();
+
         mockMvc.perform(get("/price")
-                        .param("currentDateTime", "INVALID")
-                        .param("productId", "INVALID")
-                        .param("brandId", "INVALID"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorReason").value("Unexpected parameter values"));
+                        .param("currentDateTime", currentDateTime)
+                        .param("productId", productId)
+                        .param("brandId", brandId))
+                .andExpect(expectedStatus);
+    }
+
+    static Stream<Arguments> exceptionsAreHandledCorrectly() {
+        return Stream.of(
+                Arguments.of("INVALID", "INVALID", "INVALID", status().isBadRequest(), null),
+                Arguments.of("2020-06-14T10:00:00.000Z", "35455", "2", status().isNotFound())
+        );
     }
 
     @Test
     void exceptionsAreHandledCorrectly2() throws Exception {
-        when(priceRepository.findMatchingPricesForProductAndBrandIds(any(), any())).thenThrow(RuntimeException.class);
+        Mockito.doThrow(new PersistenceException()).when(priceRepositoryImpl).findMatchingPricesForProductAndBrandIds(any(), any());
         mockMvc.perform(get("/price")
                         .param("currentDateTime", OffsetDateTime.now().toString())
                         .param("productId", "12345")
                         .param("brandId", "1"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.errorReason").value("Unexpected parameter values"));
-    }
-
-    @Test
-    void exceptionsAreHandledCorrectly3() throws Exception {
-        priceJpaRepository.deleteAll();
-        when(priceRepository.findMatchingPricesForProductAndBrandIds(any(), any())).thenCallRealMethod();
-
-        mockMvc.perform(get("/price")
-                        .param("currentDateTime", "2020-06-14T10:00:00.000Z")
-                        .param("productId", "35455")
-                        .param("brandId", "1"))
-                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorReason").value("Unexpected parameter values"));
     }
 }

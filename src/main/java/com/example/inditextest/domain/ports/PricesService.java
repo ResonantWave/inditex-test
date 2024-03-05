@@ -1,6 +1,7 @@
 package com.example.inditextest.domain.ports;
 
 import com.example.inditextest.adapters.db.model.PricePojo;
+import com.example.inditextest.domain.exception.PriceNotFoundException;
 import com.example.inditextest.domain.model.Price;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,6 @@ public class PricesService {
                 .sorted(Comparator.comparing(PricePojo::getPrice).reversed())
                 .max(Comparator.comparing(PricePojo::isPriority))
                 .map(Price::of)
-                .get();
+                .orElseThrow(() -> new PriceNotFoundException(currentDateTime, productId, brandId));
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PriceRepository implements com.example.inditextest.domain.ports.PriceRepository {
+public class PriceRepositoryImpl implements com.example.inditextest.domain.ports.PriceRepository {
 
     private final PriceJpaRepository priceJpaRepository;
 
