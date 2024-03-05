@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureEmbeddedDatabase
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-class BusinessTests {
+class PricesIntegrationTest {
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -42,9 +42,9 @@ class BusinessTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void pricesAreCorrect(String testTime, String productId, String brandId,
-						  String expectedProductId, String expectedBrandId, String expectedPriceList,
-						  OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
+	void getsCorrectPriceForProduct(String testTime, String productId, String brandId,
+									String expectedProductId, String expectedBrandId, String expectedPriceList,
+									OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
 		mockMvc.perform(get("/prices")
 				.param("currentDateTime", testTime)
 				.param("productId", productId)
@@ -59,7 +59,7 @@ class BusinessTests {
 				.andExpect(jsonPath("$.price").value(expectedPrice.doubleValue()));
 	}
 
-	static Stream<Arguments> pricesAreCorrect() {
+	static Stream<Arguments> getsCorrectPriceForProduct() {
 		return Stream.of(
 				Arguments.of("2020-06-14T10:00:00.000Z", "35455", "1",
 						"35455", "1", "1", "2020-06-14T00:00:00.000Z", "2020-12-31T23:59:59.000Z", "35.50"),

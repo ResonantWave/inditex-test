@@ -1,6 +1,8 @@
 package com.example.inditextest.adapters.api;
 
 import com.example.inditextest.domain.model.Price;
+import com.example.inditextest.domain.ports.PricesService;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +15,12 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 public class PricesEndpoint {
 
-    private final PricesFacade pricesFacade;
+    private final PricesService pricesService;
 
     @GetMapping(value = "/prices", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Price prices(@RequestParam(value = "currentDateTime") OffsetDateTime currentDateTime,
-                        @RequestParam(value = "productId") String productId,
+    public Price getPrices(@RequestParam(value = "currentDateTime") OffsetDateTime currentDateTime,
+                        @RequestParam(value = "productId") @Size(max = 10) String productId,
                         @RequestParam(value = "brandId") Integer brandId) {
-        return pricesFacade.get(currentDateTime, productId, brandId);
+        return pricesService.get(currentDateTime, productId, brandId);
     }
 }
