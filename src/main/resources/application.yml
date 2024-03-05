@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  flyway:
+    schemas: prices
+    init-sqls: CREATE SCHEMA IF NOT EXISTS ${spring.flyway.schemas}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: ${spring.flyway.schemas}

@@ -1,0 +1,6 @@
+spring:
+  flyway:
+    init-sqls: CREATE SCHEMA IF NOT EXISTS ${spring.flyway.schemas}
+  jpa:
+    properties:
+      hibernate.format_sql: true
