@@ -22,10 +22,12 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.flywaydb:flyway-core'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure:3.2.3'
 	testImplementation 'org.flywaydb.flyway-test-extensions:flyway-spring-test:7.0.0'
 	testImplementation 'io.zonky.test:embedded-database-spring-test:2.5.0'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
@@ -35,6 +37,9 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
