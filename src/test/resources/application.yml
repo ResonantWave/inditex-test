@@ -1,0 +1,10 @@
+spring:
+  jackson:
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+    time-zone: UTC
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC

@@ -14,6 +14,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Builder
@@ -31,10 +32,10 @@ public class PricePojo {
     private Integer brandId;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private OffsetDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private OffsetDateTime endDate;
 
     @Column(length = 2, nullable = false)
     private String priceList;

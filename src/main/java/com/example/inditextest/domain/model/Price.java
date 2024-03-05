@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -17,9 +18,9 @@ public class Price {
     @JsonProperty("priceList")
     private final String priceList;
     @JsonProperty("startDate")
-    private final String startDate;
+    private final OffsetDateTime startDate;
     @JsonProperty("endDate")
-    private final String endDate;
+    private final OffsetDateTime endDate;
     @JsonProperty("price")
     private final BigDecimal price;
 
@@ -28,8 +29,8 @@ public class Price {
                 price.getProductId(),
                 price.getBrandId(),
                 price.getPriceList(),
-                price.getStartDate().toString(), //fixme
-                price.getEndDate().toString(),
+                price.getStartDate(),
+                price.getEndDate(),
                 price.getPrice());
     }
 

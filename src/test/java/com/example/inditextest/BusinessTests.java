@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
 class BusinessTests {
-	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
-
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -44,39 +42,35 @@ class BusinessTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void pricesAreCorrect(LocalDateTime testTime, String productId, String brandId,
+	void pricesAreCorrect(String testTime, String productId, String brandId,
 						  String expectedProductId, String expectedBrandId, String expectedPriceList,
-						  LocalDateTime expectedStartDate, LocalDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
+						  OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
 		mockMvc.perform(get("/prices")
-				.param("currentDateTime", testTime.toString())
+				.param("currentDateTime", testTime)
 				.param("productId", productId)
 				.param("brandId", brandId))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("productId").value(expectedProductId))
-				.andExpect(jsonPath("brandId").value(expectedBrandId))
-				.andExpect(jsonPath("priceList").value(expectedPriceList))
-				.andExpect(jsonPath("startDate").value(expectedStartDate))
-				.andExpect(jsonPath("endDate").value(expectedEndDate))
-				.andExpect(jsonPath("price").value(expectedPrice));
+				.andExpect(jsonPath("$.productId").value(expectedProductId))
+				.andExpect(jsonPath("$.brandId").value(expectedBrandId))
+				.andExpect(jsonPath("$.priceList").value(expectedPriceList))
+				.andExpect(jsonPath("$.startDate").value(ISO_OFFSET_DATE_TIME.format(expectedStartDate)))
+				.andExpect(jsonPath("$.endDate").value(ISO_OFFSET_DATE_TIME.format(expectedEndDate)))
+				.andExpect(jsonPath("$.price").value(expectedPrice.doubleValue()));
 	}
 
 	static Stream<Arguments> pricesAreCorrect() {
 		return Stream.of(
-				Arguments.of(parse("2020-06-14-10.00.00"), "35455", "1",
-						"35455", "1", "1", parse("2020-06-14-00.00.00"), parse("2020-12-31-23.59.59"), "35.50"),
-				Arguments.of(parse("2020-06-14-16.00.00"), "35455", "1",
-						"35455", "1", "2", parse("2020-06-14-15.00.00"), parse("2020-06-14-18.30.00"), "25.45"),
-				Arguments.of(parse("2020-06-14-21.00.00"), "35455", "1",
-						"35455", "1", "1", parse("2020-06-14-00.00.00"), parse("2020-12-31-23.59.59"), "35.50"),
-				Arguments.of(parse("2020-06-15-10.00.00"), "35455", "1",
-						"35455", "1", "3", parse("2020-06-15-00.00.00"), parse("2020-06-15-11.00.00"), "30.50"),
-				Arguments.of(parse("2020-06-16-21.00.00"), "35455", "1",
-						"35455", "1", "4", parse("2020-06-15-16.00.00"), parse("2020-12-31-23.59.59"), "38.95")
+				Arguments.of("2020-06-14T10:00:00.000Z", "35455", "1",
+						"35455", "1", "1", "2020-06-14T00:00:00.000Z", "2020-12-31T23:59:59.000Z", "35.50"),
+				Arguments.of("2020-06-14T16:00:00.000Z", "35455", "1",
+						"35455", "1", "2", "2020-06-14T15:00:00.000Z", "2020-06-14T18:30:00.000Z", "25.45"),
+				Arguments.of("2020-06-14T21:00:00.000Z", "35455", "1",
+						"35455", "1", "1", "2020-06-14T00:00:00.000Z", "2020-12-31T23:59:59.000Z", "35.50"),
+				Arguments.of("2020-06-15T10:00:00.000Z", "35455", "1",
+						"35455", "1", "3", "2020-06-15T00:00:00.000Z", "2020-06-15T11:00:00.000Z", "30.50"),
+				Arguments.of("2020-06-16T21:00:00.000Z", "35455", "1",
+						"35455", "1", "4", "2020-06-15T16:00:00.000Z", "2020-12-31T23:59:59.000Z", "38.95")
 		);
-	}
-
-	private static LocalDateTime parse(String dateTime) {
-		return LocalDateTime.parse(dateTime, dateTimeFormatter);
 	}
 }
