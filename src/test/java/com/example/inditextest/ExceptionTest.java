@@ -48,7 +48,7 @@ public class ExceptionTest {
     // TODO: PARAMETERISE TESTS
     @Test
     void exceptionsAreHandledCorrectly() throws Exception {
-        mockMvc.perform(get("/prices")
+        mockMvc.perform(get("/price")
                         .param("currentDateTime", "INVALID")
                         .param("productId", "INVALID")
                         .param("brandId", "INVALID"))
@@ -59,7 +59,7 @@ public class ExceptionTest {
     @Test
     void exceptionsAreHandledCorrectly2() throws Exception {
         when(priceRepository.findMatchingPricesForProductAndBrandIds(any(), any())).thenThrow(RuntimeException.class);
-        mockMvc.perform(get("/prices")
+        mockMvc.perform(get("/price")
                         .param("currentDateTime", OffsetDateTime.now().toString())
                         .param("productId", "12345")
                         .param("brandId", "1"))
@@ -72,7 +72,7 @@ public class ExceptionTest {
         priceJpaRepository.deleteAll();
         when(priceRepository.findMatchingPricesForProductAndBrandIds(any(), any())).thenCallRealMethod();
 
-        mockMvc.perform(get("/prices")
+        mockMvc.perform(get("/price")
                         .param("currentDateTime", "2020-06-14T10:00:00.000Z")
                         .param("productId", "35455")
                         .param("brandId", "1"))

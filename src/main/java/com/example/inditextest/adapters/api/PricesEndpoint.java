@@ -17,7 +17,7 @@ public class PricesEndpoint {
 
     private final PricesService pricesService;
 
-    @GetMapping(value = "/prices", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/price", produces = MediaType.APPLICATION_JSON_VALUE)
     public Price getPrices(@RequestParam(value = "currentDateTime") OffsetDateTime currentDateTime,
                         @RequestParam(value = "productId") @Size(max = 10) String productId,
                         @RequestParam(value = "brandId") Integer brandId) {

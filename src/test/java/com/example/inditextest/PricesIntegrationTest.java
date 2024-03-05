@@ -45,7 +45,7 @@ class PricesIntegrationTest {
 	void getsCorrectPriceForProduct(String testTime, String productId, String brandId,
 									String expectedProductId, String expectedBrandId, String expectedPriceList,
 									OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
-		mockMvc.perform(get("/prices")
+		mockMvc.perform(get("/price")
 				.param("currentDateTime", testTime)
 				.param("productId", productId)
 				.param("brandId", brandId))
