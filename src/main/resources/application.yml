@@ -6,6 +6,7 @@ spring:
     driver-class-name: org.h2.Driver
   flyway:
     schemas: prices
+    default-schema: ${spring.flyway.schemas}
     init-sqls: CREATE SCHEMA IF NOT EXISTS ${spring.flyway.schemas}
   jpa:
     hibernate:
@@ -13,3 +14,5 @@ spring:
     properties:
       hibernate:
         default_schema: ${spring.flyway.schemas}
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
