@@ -1,4 +1,4 @@
-package com.example.inditextest.adapters.db.model;
+package com.example.inditextest.infrastructure.db.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Table(name = "prices")
-public class PricePojo {
+public class PriceDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

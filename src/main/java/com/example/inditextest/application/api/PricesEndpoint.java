@@ -1,7 +1,7 @@
-package com.example.inditextest.adapters.api;
+package com.example.inditextest.application.api;
 
 import com.example.inditextest.domain.model.Price;
-import com.example.inditextest.domain.ports.PricesService;
+import com.example.inditextest.domain.PricesService;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

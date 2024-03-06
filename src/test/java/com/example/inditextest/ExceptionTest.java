@@ -1,6 +1,6 @@
 package com.example.inditextest;
 
-import com.example.inditextest.adapters.db.PriceRepositoryImpl;
+import com.example.inditextest.infrastructure.db.PriceRepositoryImpl;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +71,7 @@ class ExceptionTest {
     @Test
     void exceptionsAreHandledCorrectly2() throws Exception {
         Mockito.doThrow(new PersistenceException()).when(priceRepositoryImpl).findMatchingPricesForProductAndBrandIds(any(), any());
+        //when(priceRepositoryImpl.findMatchingPricesForProductAndBrandIds())
         mockMvc.perform(get("/price")
                         .param("currentDateTime", OffsetDateTime.now().toString())
                         .param("productId", "12345")

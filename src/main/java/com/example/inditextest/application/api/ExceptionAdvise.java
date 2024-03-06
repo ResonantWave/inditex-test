@@ -1,4 +1,4 @@
-package com.example.inditextest.adapters.api;
+package com.example.inditextest.application.api;
 
 import com.example.inditextest.domain.exception.PriceNotFoundException;
 import org.springframework.http.HttpHeaders;

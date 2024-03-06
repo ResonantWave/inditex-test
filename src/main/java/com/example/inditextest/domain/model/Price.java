@@ -1,6 +1,6 @@
 package com.example.inditextest.domain.model;
 
-import com.example.inditextest.adapters.db.model.PricePojo;
+import com.example.inditextest.infrastructure.db.model.PriceDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class Price {
     @JsonProperty("price")
     private final BigDecimal price;
 
-    public static Price of(final PricePojo price) {
+    public static Price of(final PriceDTO price) {
         return new Price(
                 price.getProductId(),
                 price.getBrandId(),
