@@ -44,7 +44,8 @@ class PricesIntegrationTest {
 	@MethodSource
 	void getsCorrectPriceForProduct(String testTime, String productId, String brandId,
 									String expectedProductId, String expectedBrandId, String expectedPriceList,
-									OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice) throws Exception {
+									OffsetDateTime expectedStartDate, OffsetDateTime expectedEndDate, BigDecimal expectedPrice,
+									String expectedCurrency) throws Exception {
 		mockMvc.perform(get("/price")
 				.param("currentDateTime", testTime)
 				.param("productId", productId)
@@ -56,7 +57,8 @@ class PricesIntegrationTest {
 				.andExpect(jsonPath("$.priceList").value(expectedPriceList))
 				.andExpect(jsonPath("$.startDate").value(ISO_OFFSET_DATE_TIME.format(expectedStartDate)))
 				.andExpect(jsonPath("$.endDate").value(ISO_OFFSET_DATE_TIME.format(expectedEndDate)))
-				.andExpect(jsonPath("$.price").value(expectedPrice.doubleValue()));
+				.andExpect(jsonPath("$.price").value(expectedPrice.doubleValue()))
+				.andExpect(jsonPath("$.currency").value(expectedCurrency));
 	}
 
 	static Stream<Arguments> getsCorrectPriceForProduct() {
