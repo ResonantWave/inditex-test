@@ -11,6 +11,10 @@ As specified in the exercise instructions, there's two tables, `prices` and `bra
 This exercise was developed with TDD from the beginning, developing in first place all the business test cases from the exercise.
 This is reflected in the git history of this repo.
 
+Even though a full Sonarqube instance hasn't been spin up for the exercise, Sonarlint has been used as a "light" alternative.
+
+Also, with such low LOC count, test coverage is near 100%.
+
 ## How
 Just execute `.\gradlew run`! Even though this is a microservice it is configured to be able to run as a standalone app for testing purposes.
 
