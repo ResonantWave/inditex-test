@@ -1,6 +1,6 @@
 package com.example.inditextest.application.api;
 
-import com.example.inditextest.domain.model.Price;
+import com.example.inditextest.application.model.PriceResponse;
 import com.example.inditextest.domain.PricesService;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,9 @@ public class PricesEndpoint {
     private final PricesService pricesService;
 
     @GetMapping(value = "/price", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Price getPrices(@RequestParam(value = "currentDateTime") OffsetDateTime currentDateTime,
-                        @RequestParam(value = "productId") @Size(max = 10) String productId,
-                        @RequestParam(value = "brandId") Integer brandId) {
-        return pricesService.get(currentDateTime, productId, brandId);
+    public PriceResponse getPrices(@RequestParam(value = "currentDateTime") OffsetDateTime currentDateTime,
+                                   @RequestParam(value = "productId") @Size(max = 10) String productId,
+                                   @RequestParam(value = "brandId") Integer brandId) {
+        return PriceResponse.of(pricesService.get(currentDateTime, productId, brandId));
     }
 }

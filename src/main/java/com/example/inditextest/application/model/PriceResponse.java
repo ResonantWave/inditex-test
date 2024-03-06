@@ -1,9 +1,7 @@
-package com.example.inditextest.domain.model;
+package com.example.inditextest.application.model;
 
-import com.example.inditextest.infrastructure.db.model.PriceDTO;
+import com.example.inditextest.domain.model.Price;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +14,24 @@ import java.time.OffsetDateTime;
 @Setter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class Price {
+public class PriceResponse {
+    @JsonProperty("productId")
     private final String productId;
+    @JsonProperty("brandId")
     private final Integer brandId;
+    @JsonProperty("priceList")
     private final String priceList;
+    @JsonProperty("startDate")
     private final OffsetDateTime startDate;
+    @JsonProperty("endDate")
     private final OffsetDateTime endDate;
+    @JsonProperty("price")
     private final BigDecimal price;
+    @JsonProperty("currency")
     private final String currency;
 
-    public static Price of(final PriceDTO price) {
-        return new Price(
+    public static PriceResponse of(final Price price) {
+        return new PriceResponse(
                 price.getProductId(),
                 price.getBrandId(),
                 price.getPriceList(),
