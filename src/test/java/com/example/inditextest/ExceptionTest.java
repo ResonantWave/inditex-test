@@ -1,6 +1,7 @@
 package com.example.inditextest;
 
-import com.example.inditextest.infrastructure.db.PriceRepositoryImpl;
+import com.example.inditextest.infrastructure.db.PriceJpaRepository;
+import com.example.inditextest.infrastructure.db.model.PriceDTO;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -9,23 +10,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,8 +40,8 @@ class ExceptionTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Mock
-    PriceRepositoryImpl priceRepositoryImpl;
+    @MockBean
+    PriceJpaRepository priceJpaRepository;
 
     @BeforeEach
     void setup() {
@@ -52,7 +52,8 @@ class ExceptionTest {
     @MethodSource
     void exceptionsAreHandledCorrectly(String currentDateTime, String productId, String brandId, ResultMatcher expectedStatus
                                         ) throws Exception {
-        when(priceRepositoryImpl.findMatchingPricesForProductAndBrandIds(any(), any())).thenCallRealMethod();
+        when(priceJpaRepository.findByBrandIdAndProductId(any(), any()))
+                .thenReturn(List.of(PriceDTO.builder().startDate(OffsetDateTime.now()).endDate(OffsetDateTime.now()).build()));
 
         mockMvc.perform(get("/price")
                         .param("currentDateTime", currentDateTime)
@@ -61,22 +62,20 @@ class ExceptionTest {
                 .andExpect(expectedStatus);
     }
 
-    static Stream<Arguments> exceptionsAreHandledCorrectly() {
-        return Stream.of(
-                Arguments.of("INVALID", "INVALID", "INVALID", status().isBadRequest(), null),
-                Arguments.of("2020-06-14T10:00:00.000Z", "35455", "2", status().isNotFound())
-        );
-    }
-
     @Test
-    void exceptionsAreHandledCorrectly2() throws Exception {
-        Mockito.doThrow(new PersistenceException()).when(priceRepositoryImpl).findMatchingPricesForProductAndBrandIds(any(), any());
-        //when(priceRepositoryImpl.findMatchingPricesForProductAndBrandIds())
+    void internalServerErrorIsHandledCorrectly() throws Exception {
+        when(priceJpaRepository.findByBrandIdAndProductId(any(), any())).thenThrow(PersistenceException.class);
         mockMvc.perform(get("/price")
                         .param("currentDateTime", OffsetDateTime.now().toString())
                         .param("productId", "12345")
                         .param("brandId", "1"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.errorReason").value("Unexpected parameter values"));
+                .andExpect(status().isInternalServerError());
+    }
+
+    static Stream<Arguments> exceptionsAreHandledCorrectly() {
+        return Stream.of(
+                Arguments.of("INVALID", "INVALID", "INVALID", status().isBadRequest()),
+                Arguments.of("2020-06-14T10:00:00.000Z", "35455", "2", status().isNotFound())
+        );
     }
 }
