@@ -19,6 +19,8 @@ With the app up and running you can send requests to the [/price](src/main/java/
 To run the tests (unit and integration) run `.\gradlew test`.
 
 ## Asumptions taken
+* Following the requirement of not implementing unnecessary features:
+  * Brand only exists as a table in the database. It has not been brought as a JPA repo as it wouldn't be used anywhere.
 * All dates will comply with the ISO standard, specifically in the YYYY-MM-DDTHH:mm:ssZ form.
 * Both PRODUCT_ID and PRICE_LIST have been defined as strings and not as integers. This can provide more flexibility if non-numeric ids are required.
 * These two fields have also been defined with an arbitrary length of 10 and 2 respectively.
