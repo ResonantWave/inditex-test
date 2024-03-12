@@ -1,4 +1,4 @@
-package com.example.inditextest.application.model;
+package com.example.inditextest.infrastructure.api.model.model;
 
 import com.example.inditextest.domain.model.Price;
 import com.fasterxml.jackson.annotation.JsonProperty;

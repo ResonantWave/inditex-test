@@ -1,8 +1,9 @@
-package com.example.inditextest.domain;
+package com.example.inditextest.application;
 
 import com.example.inditextest.domain.exception.PriceNotFoundException;
 import com.example.inditextest.domain.model.Price;
 import com.example.inditextest.domain.ports.PriceRepository;
+import com.example.inditextest.domain.ports.PriceService;
 import com.example.inditextest.infrastructure.db.model.PriceEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
-public class PricesService {
+public class PricesService implements PriceService {
 
     private final PriceRepository priceRepository;
 

@@ -1,7 +1,7 @@
-package com.example.inditextest.application.api;
+package com.example.inditextest.infrastructure.api;
 
-import com.example.inditextest.application.model.PriceResponse;
-import com.example.inditextest.domain.PricesService;
+import com.example.inditextest.infrastructure.api.model.model.PriceResponse;
+import com.example.inditextest.application.PricesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
