@@ -32,3 +32,7 @@ To run the tests (unit and integration) run `.\gradlew test`.
 * Prices are being treated as BigDecimals to avoid rounding errors with doubles and other similar types.
 * For the sake of the exercise data initialisation is done in the same script the tables are created.
 * It is assumed that no two or more prices will conflict in priority within any given time range.
+
+## Notes
+* Swagger has been configured and it's available at http://localhost:8080/swagger-ui/index.html
+* A Postman E2E collection is provided in [Inditex Prices.postman_collection.json](Inditex Prices.postman_collection.json) file.

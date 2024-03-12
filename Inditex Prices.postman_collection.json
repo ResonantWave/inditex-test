@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "153d7e97-05c3-4124-bf0f-19071dff14ef",
+		"name": "Inditex Prices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33565139"
+	},
+	"item": [
+		{
+			"name": "Price is found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body has expected data\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"        \"productId\": \"35455\",\r",
+							"        \"brandId\": 1,\r",
+							"        \"priceList\": \"1\",\r",
+							"        \"startDate\": \"2020-06-14T02:00:00+02:00\",\r",
+							"        \"endDate\": \"2021-01-01T00:59:59+01:00\",\r",
+							"        \"price\": 35.50,\r",
+							"        \"currency\": \"EUR\"\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8080/price?currentDateTime=2020-06-14T10:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"price"
+					],
+					"query": [
+						{
+							"key": "currentDateTime",
+							"value": "2020-06-14T10:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Price is not found - 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8080/price?currentDateTime=2001-04-06T10:00:00Z&productId=35452&brandId=2",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"price"
+					],
+					"query": [
+						{
+							"key": "currentDateTime",
+							"value": "2001-04-06T10:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35452"
+						},
+						{
+							"key": "brandId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

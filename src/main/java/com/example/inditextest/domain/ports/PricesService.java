@@ -4,6 +4,6 @@ import com.example.inditextest.domain.model.Price;
 
 import java.time.OffsetDateTime;
 
-public interface PriceService {
+public interface PricesService {
     Price get(OffsetDateTime currentDateTime, String productId, Integer brandId);
 }

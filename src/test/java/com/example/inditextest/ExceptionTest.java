@@ -1,7 +1,6 @@
 package com.example.inditextest;
 
 import com.example.inditextest.infrastructure.db.PriceJpaRepository;
-import com.example.inditextest.infrastructure.db.model.PriceEntity;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -52,8 +51,8 @@ class ExceptionTest {
     @MethodSource
     void exceptionsAreHandledCorrectly(String currentDateTime, String productId, String brandId, ResultMatcher expectedStatus
                                         ) throws Exception {
-        when(priceJpaRepository.findByBrandIdAndProductId(any(), any()))
-                .thenReturn(List.of(PriceEntity.builder().startDate(OffsetDateTime.now()).endDate(OffsetDateTime.now()).build()));
+        when(priceJpaRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateIsGreaterThanEqualOrderByPriorityDesc(any(), any(), any(), any()))
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/price")
                         .param("currentDateTime", currentDateTime)
@@ -64,7 +63,8 @@ class ExceptionTest {
 
     @Test
     void internalServerErrorIsHandledCorrectly() throws Exception {
-        when(priceJpaRepository.findByBrandIdAndProductId(any(), any())).thenThrow(PersistenceException.class);
+        when(priceJpaRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateIsGreaterThanEqualOrderByPriorityDesc(any(), any(), any(), any()))
+                .thenThrow(PersistenceException.class);
         mockMvc.perform(get("/price")
                         .param("currentDateTime", OffsetDateTime.now().toString())
                         .param("productId", "12345")
