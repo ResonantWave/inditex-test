@@ -1,7 +1,7 @@
 package com.example.inditextest;
 
 import com.example.inditextest.infrastructure.db.PriceJpaRepository;
-import com.example.inditextest.infrastructure.db.model.PriceDTO;
+import com.example.inditextest.infrastructure.db.model.PriceEntity;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ class ExceptionTest {
     void exceptionsAreHandledCorrectly(String currentDateTime, String productId, String brandId, ResultMatcher expectedStatus
                                         ) throws Exception {
         when(priceJpaRepository.findByBrandIdAndProductId(any(), any()))
-                .thenReturn(List.of(PriceDTO.builder().startDate(OffsetDateTime.now()).endDate(OffsetDateTime.now()).build()));
+                .thenReturn(List.of(PriceEntity.builder().startDate(OffsetDateTime.now()).endDate(OffsetDateTime.now()).build()));
 
         mockMvc.perform(get("/price")
                         .param("currentDateTime", currentDateTime)

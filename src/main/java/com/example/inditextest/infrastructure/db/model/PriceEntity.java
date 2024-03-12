@@ -22,7 +22,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Table(name = "prices")
-public class PriceDTO {
+public class PriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

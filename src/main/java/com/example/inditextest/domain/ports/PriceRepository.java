@@ -1,9 +1,9 @@
 package com.example.inditextest.domain.ports;
 
-import com.example.inditextest.infrastructure.db.model.PriceDTO;
+import com.example.inditextest.infrastructure.db.model.PriceEntity;
 
 import java.util.List;
 
 public interface PriceRepository {
-    List<PriceDTO> findMatchingPricesForProductAndBrandIds(String productId, Integer brandId);
+    List<PriceEntity> findMatchingPricesForProductAndBrandIds(String productId, Integer brandId);
 }
